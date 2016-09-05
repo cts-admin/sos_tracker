@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+{% block title %}Index{% endblock title %}
+
+{% block content_title %}{% if search %}Search "{{ search }}"{% else %}Coordinates{% endif %}{% endblock %}
+
+{% block content %}
+	{% for point in object_list %}
+		{% if search %}
+			{% set point = point.point %}
+		{% endif %}
+		<h3>
+			<a href="{{ url_for('detail', slug=point.slug) }}">
+				{{ point.name }}
+			</a>
+		</h3>
+		<p>Created {{ point.timestamp.strftime('%m/%d/%Y at %X %p') }}</p>
+	{% else %}
+		<p>No points have been added yet.</p>
+	{% endfor %}
+	{% include "includes/pagination.html" %}
+{% endblock %}

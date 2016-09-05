@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+
+{% block title %}Download points{% endblock %}
+
+{% block content_title %}{% if dsearch %}Search: "{{ dsearch }}"{% else %}Query points for file download{% endif %}{% endblock content_title%}
+
+{% block content %}
+	<form action="{{ url_for('download') }}" class="form-horizontal" id="download-search-form" method="get" role="download-search">
+		<div class="form-group">
+			<label for="download" class="col-sm-2 control-label">Download Search</label>
+			<div class="col-sm-10">
+				<input class="form-control" name="dq" placeholder="Download Search" type="text" value="{% if dsearch %}{{ dsearch }}{% endif %}">
+			</div>
+		</div>
+	</form>
+	{% if dsearch %}
+		<form action="{{ url_for('download') }}" class="form-horizontal" method="post">
+			<input id="prev-search" name="prev-search" type="hidden" value="{% if dsearch %}{{ dsearch }}{% endif %}">
+			<div class="form-group">
+				<label for="filename" class="col-sm-2 control-label">Search Name</label>
+				<div class="col-sm-10">
+					<input class="form-control" id="filename" name="filename" placeholder="Required" type="text" value="{{ request.form.get('filename', '') }}">
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-offset-2 col-sm-10">
+					<div class="checkbox">
+						<label>
+							<input name="save" type="checkbox" value="y">Add search results to file list?
+						</label>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-offset-2 col-sm-10">
+					<button class="btn btn-primary" type="submit">Download</button>
+					<a class="btn btn-default" href="{{ url_for('index') }}">Cancel</a>
+				</div>
+			</div>
+		</form>
+	{% endif %}
+	{% for point in object_list %}
+		{% if dsearch %}			
+			{% set point = point.point %}
+		{% endif %}
+		<h3>
+			<a href="{{ url_for('detail', slug=point.slug) }}">
+				{{ point.name }}
+			</a>
+		</h3>
+		<p>Created {{ point.timestamp.strftime('%m/%d/%Y at %X %p') }}</p>
+	{% else %}
+		{% if dsearch %}
+			<p>Your search did not find any points.</p>
+		{% else %}
+			<p>No points have been added yet.</p>
+		{% endif %}
+	{% endfor %}	
+	{% include "includes/pagination.html" %}
+{% endblock content %}

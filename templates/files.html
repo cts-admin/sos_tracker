@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+
+{% block title %}Uploaded Files{% endblock title %}
+
+{% block content %}
+
+	<p>These are the user uploaded files.</p>
+
+	<ul class=files>
+		{% for file in files %}
+			<li><a href="{{ url_for('uploaded', filename=file) }}">{{ file }}</a></li>
+		{% else %}
+			<li>No files here!</li>
+		{% endfor %}
+	</ul>
+
+{% endblock content %}

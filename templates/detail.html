@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+{% block extra_scripts %}{{ pointmap.js }}{% endblock %}
+
+{% block title %}{{ point.name }}{% endblock %}
+
+{% block content_title %}{{ point.name }}{% endblock %}
+{% block content_subtitle %}
+	{% if point.published %}
+		(Public)
+	{% else %}
+		(Private)
+	{% endif %}
+{% endblock content_subtitle %}
+
+{% block content %}
+	<p>Latitude: {{ point.latitude }}</p>
+	<p>Longitude: {{ point.longitude }}</p>
+	<p>Pin: {{ point.pin }}</p>
+	<p>Notes: {{ point.notes }}</p>
+	<p>Saved to online database on {{ point.timestamp.strftime('%m/%d/%Y at %X %p') }}.</p>
+
+	{% if current_user.is_authenticated %}
+		<a class="btn btn-default" href="{{ url_for('edit', slug=point.slug) }}">Edit Point</a>
+	{% endif %}
+
+	</br>
+	{{ pointmap.html }}
+{% endblock %}

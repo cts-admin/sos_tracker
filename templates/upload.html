@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+
+{% block title %}Upload{% endblock title %}
+
+{% block content_title %}File upload{% endblock %}
+
+{% block content %}
+	<form class="form" method="POST" action="" enctype="multipart/form-data">
+		{{ form.hidden_tag() }}
+		{% for field in form %}
+			<div class="field">
+				{% if field.errors %}
+					{% for error in field.errors %}
+						<div class="notification error">{{ error }}</div>
+					{% endfor %}
+				{% endif %}
+				{% if field.label.text == "Public?" %}
+					<label for="published" class="col-sm-2 control-label">{{ field.label }}</label>
+				{% endif %}
+				{{ field(placeholder=field.label.text) }}
+			</div>
+		{% endfor %}
+		<button class="btn btn-primary" type="submit">Upload</button>
+		<a class="btn btn-default" href="{{ url_for('index') }}">Cancel</a>
+	</form>
+
+{% endblock content %}

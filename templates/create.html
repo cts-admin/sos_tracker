@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+{% import "macros.html" as macros %}
+
+{% block title %}Create point{% endblock %}
+
+{% block content_title %}Create point{% endblock %}
+
+{% block content %}
+	<div class="row">
+		<div class="col-xs-12 col-md-3 col-sm-4 col-sm-offset-4 col-md-offset-4 col-lg-3 col-lg-offset-4">
+			{% call macros.render_form(form, action_url=url_for('create'), action_text="Create",
+										class_='create-form') %}
+				{{ macros.render_field(form.name, label_visible=true, placeholder='Name', type='text') }}
+				{{ macros.render_field(form.latitude, label_visible=true, placeholder='Latitude', type='number') }}
+				{{ macros.render_field(form.longitude, label_visible=true, placeholder='Longitude', type='number') }}
+				{{ macros.render_field(form.pin, label_visible=true, placeholder='Optional', type='text') }}
+				{{ macros.render_field(form.notes, label_visible=true, placeholder='Notes', type='text') }}
+				{{ macros.render_field(form.last_visit, label_visible=true, placeholder='Optional', type='text') }}
+				{{ macros.render_checkbox_field(form.published) }}
+			{% endcall %}
+		</div>
+	</div>
+{% endblock content %}

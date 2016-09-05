@@ -1,0 +1,55 @@
+{% extends "layout.html" %}
+
+{% block title %}Edit point{% endblock %}
+
+{% block content_title %}Edit point{% endblock %}
+
+{% block content %}
+	<form action="{{ url_for('edit', slug=point.slug) }}" class="form-horizontal" method="post">
+		<div class="form-group">
+			<label for="name" class="col-sm-2 control-label">Name</label>
+			<div class="col-sm-10">
+				<input class="form-control" id="name" name="name" type="text" value="{{ request.form.get('name', point.name) }}">
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="latitude" class="col-sm-2 control-label">Latitude</label>
+			<div class="col-sm-10">
+				<input class="form-control" id="latitude" name="latitude" type="text" value="{{ request.form.get('latitude', point.latitude) }}">
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="longitude" class="col-sm-2 control-label">Longitude</label>
+			<div class="col-sm-10">
+				<input class="form-control" id="longitude" name="longitude" type="text" value="{{ request.form.get('longitude', point.longitude) }}">
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="pin" class="col-sm-2 control-label">Pin</label>
+			<div class="col-sm-10">
+				<input class="form-control" id="pin" name="pin" type="text" value="{{ request.form.get('pin', point.pin) }}">
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="notes" class="col-sm-2 control-label">Notes</label>
+			<div class="col-sm-10">
+				<input class="form-control" id="notes" name="notes" type="text" value="{{ request.form.get('notes', point.notes) }}">
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-sm-offset-2 col-sm-10">
+				<div class="checkbox">
+					<label>
+						<input {% if point.published %}checked="checked" {% endif %}name="published" type="checkbox" value="n"> Public
+					</label>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-sm-offset-2 col-sm-10">
+				<button class="btn btn-primary" type="submit">Save</button>
+				<a class="btn btn-default" href="{{ url_for('index') }}">Cancel</a>
+			</div>
+		</div>
+	</form>
+{% endblock %}
