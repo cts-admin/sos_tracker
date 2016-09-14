@@ -28,8 +28,8 @@ from playhouse.flask_utils import get_object_or_404, object_list
 from urllib.parse import urlencode
 from werkzeug.utils import secure_filename
 
-import models
 import forms
+import models
 
 app = Flask(__name__)
 app.config.from_object(__name__)

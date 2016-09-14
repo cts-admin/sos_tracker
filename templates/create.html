@@ -11,8 +11,8 @@
 			{% call macros.render_form(form, action_url=url_for('create'), action_text="Create",
 										class_='create-form') %}
 				{{ macros.render_field(form.name, label_visible=true, placeholder='Name', type='text') }}
-				{{ macros.render_field(form.latitude, label_visible=true, placeholder='Latitude', type='number') }}
-				{{ macros.render_field(form.longitude, label_visible=true, placeholder='Longitude', type='number') }}
+				{{ macros.render_field(form.latitude, label_visible=true, placeholder='Latitude', type='number', step='any') }}
+				{{ macros.render_field(form.longitude, label_visible=true, placeholder='Longitude', type='number', step='any') }}
 				{{ macros.render_field(form.pin, label_visible=true, placeholder='Optional', type='text') }}
 				{{ macros.render_field(form.notes, label_visible=true, placeholder='Notes', type='text') }}
 				{{ macros.render_field(form.last_visit, label_visible=true, placeholder='Optional', type='text') }}

@@ -1,6 +1,6 @@
 from flask_wtf import Form
 from peewee import OperationalError
-from wtforms import StringField, PasswordField, TextAreaField, SelectField, FileField, BooleanField, FloatField, DateField
+from wtforms import StringField, PasswordField, TextAreaField, SelectField, FileField, BooleanField, DecimalField, DateField
 from wtforms.validators import (DataRequired, Regexp, ValidationError, Email,
 								Length, EqualTo, InputRequired)
 
@@ -82,11 +82,11 @@ class CreateCoordForm(Form):
 		validators=[
 			InputRequired()
 		])
-	latitude = FloatField(
+	latitude = DecimalField(
 		'Latitude',
 		validators=[InputRequired()],
 		)
-	longitude = FloatField(
+	longitude = DecimalField(
 		'Longitude',
 		validators=[InputRequired()],
 		)
