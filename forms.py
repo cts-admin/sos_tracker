@@ -1,6 +1,6 @@
 from flask_wtf import Form
 from peewee import OperationalError
-from wtforms import StringField, PasswordField, TextAreaField, SelectField, FileField, BooleanField, FloatField
+from wtforms import StringField, PasswordField, TextAreaField, SelectField, FileField, BooleanField, FloatField, DateField
 from wtforms.validators import (DataRequired, Regexp, ValidationError, Email,
 								Length, EqualTo, InputRequired)
 

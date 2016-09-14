@@ -34,7 +34,7 @@ class Team(Model):
 class User(UserMixin, Model):
 	username = CharField(unique=True)
 	email = CharField(unique=True)
-	password = CharField(max_length=100)
+	password = CharField(max_length=700)
 	joined_at = DateTimeField(default=datetime.datetime.now)
 	is_admin = BooleanField(default=False)
 	team = ForeignKeyField(
@@ -158,7 +158,67 @@ class Visit(Model):
 		database = DATABASE
 
 class Weather(Model):
-	
+	"""Model for weather data."""
+
+	#Summary of the day as a whole using averages
+	day_summary = TextField()
+
+	# One day in the future
+	ft_7_time = IntegerField()
+	ft_7_precip_intensity_max = FloatField()
+	ft_7_precip_accumulation = FloatField()
+	ft_7_temp_min = FloatField()
+	ft_7_temp_max = FloatField()
+
+	# Two days in the future
+	ft_2_time = IntegerField()
+	ft_2_precip_intensity_max = FloatField()
+	ft_2_precip_accumulation = FloatField()
+	ft_2_temp_min = FloatField()
+	ft_2_temp_max = FloatField()
+
+	# Three days in the future
+	ft_3_time = IntegerField()
+	ft_3_precip_intensity_max = FloatField()
+	ft_3_precip_accumulation = FloatField()
+	ft_3_temp_min = FloatField()
+	ft_3_temp_max = FloatField()
+
+	# Four days in the future
+	ft_4_time = IntegerField()
+	ft_4_precip_intensity_max = FloatField()
+	ft_4_precip_accumulation = FloatField()
+	ft_4_temp_min = FloatField()
+	ft_4_temp_max = FloatField()
+
+	# Five days in the future
+	ft_5_time = IntegerField()
+	ft_5_precip_intensity_max = FloatField()
+	ft_5_precip_accumulation = FloatField()
+	ft_5_temp_min = FloatField()
+	ft_5_temp_max = FloatField()
+
+	# Six days in the future
+	ft_6_time = IntegerField()
+	ft_6_precip_intensity_max = FloatField()
+	ft_6_precip_accumulation = FloatField()
+	ft_6_temp_min = FloatField()
+	ft_6_temp_max = FloatField()
+
+	# Seven days in the future
+	ft_7_time = IntegerField()
+	ft_7_precip_intensity_max = FloatField()
+	ft_7_precip_accumulation = FloatField()
+	ft_7_temp_min = FloatField()
+	ft_7_temp_max = FloatField()
+
+	coordinate = ForeignKeyField(
+		rel_model=Coordinate,
+		related_name='forecasts'
+	)
+
+	class Meta:
+		database = DATABASE
 
 
 def initialize():
