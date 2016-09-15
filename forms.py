@@ -2,7 +2,7 @@ from flask_wtf import Form
 from peewee import OperationalError
 from wtforms import StringField, PasswordField, TextAreaField, SelectField, FileField, BooleanField, DecimalField, DateField
 from wtforms.validators import (DataRequired, Regexp, ValidationError, Email,
-								Length, EqualTo, InputRequired)
+								Length, EqualTo, InputRequired, Optional)
 
 from models import User, Team
 
@@ -79,9 +79,8 @@ class LoginForm(Form):
 class CreateCoordForm(Form):
 	name = StringField(
 		'Name',
-		validators=[
-			InputRequired()
-		])
+		validators=[InputRequired()],
+		)
 	latitude = DecimalField(
 		'Latitude',
 		validators=[InputRequired()],
@@ -90,9 +89,16 @@ class CreateCoordForm(Form):
 		'Longitude',
 		validators=[InputRequired()],
 		)
-	pin = StringField('Pin')
+	pin = StringField(
+		'Pin',
+		validators=[Optional()],
+		)
 	notes = TextAreaField(
 		'Notes',
-		validators=[InputRequired()])
-	last_visit = DateField('Date Last Visited')
+		validators=[InputRequired()],
+		)
+	last_visit = DateField(
+		'Date Last Visited',
+		validators=[Optional()],
+		)
 	published = BooleanField('Public?')

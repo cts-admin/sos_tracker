@@ -163,12 +163,19 @@ class Weather(Model):
 	#Summary of the day as a whole using averages
 	day_summary = TextField()
 
+	# Zero days in the future (present day)
+	ft_0_time = IntegerField()
+	ft_0_precip_intensity_max = FloatField()
+	ft_0_precip_accumulation = FloatField()
+	ft_0_temp_min = FloatField()
+	ft_0_temp_max = FloatField()
+
 	# One day in the future
-	ft_7_time = IntegerField()
-	ft_7_precip_intensity_max = FloatField()
-	ft_7_precip_accumulation = FloatField()
-	ft_7_temp_min = FloatField()
-	ft_7_temp_max = FloatField()
+	ft_1_time = IntegerField()
+	ft_1_precip_intensity_max = FloatField()
+	ft_1_precip_accumulation = FloatField()
+	ft_1_temp_min = FloatField()
+	ft_1_temp_max = FloatField()
 
 	# Two days in the future
 	ft_2_time = IntegerField()
@@ -223,5 +230,5 @@ class Weather(Model):
 
 def initialize():
 	DATABASE.connect()
-	DATABASE.create_tables([Team, User, Coordinate, FTSCoord], safe=True)
+	DATABASE.create_tables([Team, User, Coordinate, FTSCoord, Weather, Visit], safe=True)
 	DATABASE.close()
