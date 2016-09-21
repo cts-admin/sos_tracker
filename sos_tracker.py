@@ -337,6 +337,7 @@ def clean_querystring(request_args, *keys_to_remove, **new_values):
 @app.route('/files')
 def list_files():
 	files = os.listdir(app.config['UPLOAD_FOLDER'])
+	files.remove('.gitignore')
 	return render_template('files.html', files=files)
 
 
@@ -365,7 +366,7 @@ def upload():
 @app.route('/upload/<filename>')
 def uploaded(filename):
 	return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
-	
+
 
 def main():
 	models.initialize()
