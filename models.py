@@ -31,6 +31,19 @@ class Team(Model):
 		except IntegrityError:
 			raise ValueError("Team already exists.")
 
+	@classmethod
+	def delete_team(cls, team_id):
+		to_delete = Team.get(Team.id == team_id)
+		to_delete.delete_instance(recursive=True, delete_nullable=True)
+
+	@classmethod
+	def get_team(cls, team_id):
+		return Team.get(Team.id == team_id)
+
+	@classmethod
+	def get_teams(cls):
+		return Team.select()
+
 class User(UserMixin, Model):
 	username = CharField(unique=True)
 	email = CharField(unique=True)
