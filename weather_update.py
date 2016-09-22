@@ -1,5 +1,7 @@
 """
 Query database for coordinates and update weather data for each point.
+
+To be run periodically as a cron job.
 """
 import json
 import os
@@ -8,6 +10,7 @@ import urllib
 import models
 
 API_KEY = os.environ.get('SOS_FORECAST_API_KEY')
+
 
 def main():
 	coordinates = models.Coordinate.select()
@@ -148,6 +151,7 @@ def main():
 		)
 
 		print(weather_event)
+
 
 if __name__ == '__main__':
 	main()
