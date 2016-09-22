@@ -85,7 +85,7 @@ class Coordinate(Model):
 	notes = TextField()
 	recommended_visit = DateField(null=True)
 	slug = CharField(unique=True)
-	published = BooleanField(index=True) # Coordinates/points can be made public
+	published = BooleanField(index=True) # Published is being used as an alias for public
 	timestamp = DateTimeField(default=datetime.datetime.now, index=True)
 	user = ForeignKeyField(
 		rel_model=User,
@@ -125,8 +125,15 @@ class Coordinate(Model):
 		base_coord.save(force_insert=force_insert)
 
 	@classmethod
-	def private(cls):
-		return Coordinate.select().where(Coordinate.published == False)
+	def private(cls, user):
+		team = user.team
+		return (Coordinate
+			.select(Coordinate, User)
+			.join(User)
+			.where(
+				(User.team == team) &
+				(Coordinate.published == False))
+			.order_by(Coordinate.timestamp.desc()))
 
 	@classmethod
 	def public(cls):

@@ -4,6 +4,10 @@
 
 {% block content_title %}{% if search %}Search "{{ search }}"{% else %}Coordinates{% endif %}{% endblock %}
 
+{% block content_subtitle %}
+	Public coordinates are visible to all registered users. Private coordinates are visible only to you and other members of your team.
+{% endblock content_subtitle %}
+
 {% block content %}
 	{% for point in object_list %}
 		{% if search %}

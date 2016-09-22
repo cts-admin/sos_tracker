@@ -116,7 +116,7 @@ def logout():
 def parse_file(filename, publish):
 	file = os.path.join(app.config['UPLOAD_FOLDER'], filename)
 	parsed = []
-	user = models.User.select().where(models.User.username == g.user._get_current_object().username)
+	user = models.User.get(models.User.username == g.user._get_current_object().username)
 	if filename[-3:] == 'txt':
 		with open(file, 'r') as f:
 			csv_input = csv.reader(f)
@@ -228,7 +228,7 @@ def index():
 def create():
 	form = forms.CreateCoordForm()
 	if form.validate_on_submit():
-		user = models.User.select().where(models.User.username == g.user._get_current_object().username)
+		user = models.User.get(models.User.username == g.user._get_current_object().username)
 		point = models.Coordinate.create(
 			user = user,
 			latitude = form.latitude.data,
@@ -275,7 +275,8 @@ def download():
 @app.route('/private')
 @login_required
 def private():
-	query = models.Coordinate.private().order_by(models.Coordinate.timestamp.desc())
+	user = models.User.get(models.User.username == g.user._get_current_object().username)
+	query = models.Coordinate.private(user)
 	return object_list('index.html', query, check_bounds=False)
 
 
