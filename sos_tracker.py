@@ -305,7 +305,7 @@ def edit(slug):
 	point = get_object_or_404(models.Coordinate, models.Coordinate.slug == slug)
 	if request.method == 'POST':
 		if request.form['submit'] == 'Delete':
-			point.delete_instance()
+			point.delete_instance(recursive=True)
 			flash('Point deleted successfully!', 'success')
 			return redirect(url_for('index'))
 		elif request.form.get('latitude') and request.form.get('longitude') and request.form.get('name'):
