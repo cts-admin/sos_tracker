@@ -40,3 +40,7 @@ div#body a {
 p.image img {
 	max-width: 580px;
 }
+
+input[type=checkbox] {
+	margin: 10px auto;
+}
