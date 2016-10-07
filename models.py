@@ -82,14 +82,22 @@ class Coordinate(Model):
 	class Meta:
 		database = DATABASE
 
+
 	def get_user_coords(self):
 		return Coordinate.select().where(Coordinate.user == self)
 
+
 	def get_team_coords(self):
+		"""Return only the coordinates belonging to the same team as self."""
 		return Coordinate.select().where(
 			(Coordinate.user << User.team_users()) |
 			(Coordinate.user == self)
 		)
+
+	@classmethod
+	def get_weather_coords(cls):
+		pass
+
 
 	def save(self, *args, **kwargs):
 		if not self.slug:
@@ -99,6 +107,7 @@ class Coordinate(Model):
 		# Store search content
 		self.update_search_index()
 		return ret
+
 
 	def update_search_index(self):
 		try:
@@ -111,13 +120,16 @@ class Coordinate(Model):
 		base_coord.content = '\n'.join((self.name, self.notes))
 		base_coord.save(force_insert=force_insert)
 
+
 	@classmethod
 	def private(cls):
 		return Coordinate.select().where(Coordinate.published == False)
 
+
 	@classmethod
 	def public(cls):
 		return Coordinate.select().where(Coordinate.published == True)
+
 
 	@classmethod
 	def search(cls, query):
@@ -139,6 +151,7 @@ class Coordinate(Model):
 				(FTSCoord.match(search)))
 			.order_by(SQL('score').desc()))
 
+
 # Full Text Search Model
 class FTSCoord(FTSModel):
 	entry_id = IntegerField(Coordinate)
@@ -146,6 +159,7 @@ class FTSCoord(FTSModel):
 
 	class Meta:
 		database = DATABASE
+
 
 class Visit(Model):
 	visit_date = DateField()
@@ -156,6 +170,7 @@ class Visit(Model):
 
 	class Meta:
 		database = DATABASE
+
 
 class Weather(Model):
 	"""Model for weather data."""
