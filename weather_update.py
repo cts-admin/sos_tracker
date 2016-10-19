@@ -147,7 +147,5 @@ def main():
 			ft_7_temp_max = ft_7_temp_max,
 		)
 
-		print(weather_event)
-
 if __name__ == '__main__':
 	main()

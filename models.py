@@ -95,8 +95,14 @@ class Coordinate(Model):
 		)
 
 	@classmethod
-	def get_weather_coords(cls):
-		pass
+	def get_coords_without_weather(cls):
+		"""Return only coordinates that have no weather data associated with them."""
+		coordinates = (Coordinate
+			.select()
+ 			.join(Weather, JOIN.LEFT_OUTER)
+ 			.group_by(Coordinate)
+ 			.having(fn.COUNT(Weather.id) == 0))
+		return coordinates
 
 
 	def save(self, *args, **kwargs):
@@ -176,63 +182,63 @@ class Weather(Model):
 	"""Model for weather data."""
 
 	#Summary of the day as a whole using averages
-	day_summary = TextField()
+	day_summary = TextField(null = True)
 
 	# Zero days in the future (present day)
 	ft_0_time = IntegerField()
-	ft_0_precip_intensity_max = FloatField()
+	ft_0_precip_intensity_max = FloatField(null = True)
 	ft_0_precip_accumulation = FloatField()
 	ft_0_temp_min = FloatField()
 	ft_0_temp_max = FloatField()
 
 	# One day in the future
-	ft_1_time = IntegerField()
-	ft_1_precip_intensity_max = FloatField()
-	ft_1_precip_accumulation = FloatField()
-	ft_1_temp_min = FloatField()
-	ft_1_temp_max = FloatField()
+	ft_1_time = IntegerField(null = True)
+	ft_1_precip_intensity_max = FloatField(null = True)
+	ft_1_precip_accumulation = FloatField(null = True)
+	ft_1_temp_min = FloatField(null = True)
+	ft_1_temp_max = FloatField(null = True)
 
 	# Two days in the future
-	ft_2_time = IntegerField()
-	ft_2_precip_intensity_max = FloatField()
-	ft_2_precip_accumulation = FloatField()
-	ft_2_temp_min = FloatField()
-	ft_2_temp_max = FloatField()
+	ft_2_time = IntegerField(null = True)
+	ft_2_precip_intensity_max = FloatField(null = True)
+	ft_2_precip_accumulation = FloatField(null = True)
+	ft_2_temp_min = FloatField(null = True)
+	ft_2_temp_max = FloatField(null = True)
 
 	# Three days in the future
-	ft_3_time = IntegerField()
-	ft_3_precip_intensity_max = FloatField()
-	ft_3_precip_accumulation = FloatField()
-	ft_3_temp_min = FloatField()
-	ft_3_temp_max = FloatField()
+	ft_3_time = IntegerField(null = True)
+	ft_3_precip_intensity_max = FloatField(null = True)
+	ft_3_precip_accumulation = FloatField(null = True)
+	ft_3_temp_min = FloatField(null = True)
+	ft_3_temp_max = FloatField(null = True)
 
 	# Four days in the future
-	ft_4_time = IntegerField()
-	ft_4_precip_intensity_max = FloatField()
-	ft_4_precip_accumulation = FloatField()
-	ft_4_temp_min = FloatField()
-	ft_4_temp_max = FloatField()
+	ft_4_time = IntegerField(null = True)
+	ft_4_precip_intensity_max = FloatField(null = True)
+	ft_4_precip_accumulation = FloatField(null = True)
+	ft_4_temp_min = FloatField(null = True)
+	ft_4_temp_max = FloatField(null = True)
 
 	# Five days in the future
-	ft_5_time = IntegerField()
-	ft_5_precip_intensity_max = FloatField()
-	ft_5_precip_accumulation = FloatField()
-	ft_5_temp_min = FloatField()
-	ft_5_temp_max = FloatField()
+	ft_5_time = IntegerField(null = True)
+	ft_5_precip_intensity_max = FloatField(null = True)
+	ft_5_precip_accumulation = FloatField(null = True)
+	ft_5_temp_min = FloatField(null = True)
+	ft_5_temp_max = FloatField(null = True)
 
 	# Six days in the future
-	ft_6_time = IntegerField()
-	ft_6_precip_intensity_max = FloatField()
-	ft_6_precip_accumulation = FloatField()
-	ft_6_temp_min = FloatField()
-	ft_6_temp_max = FloatField()
+	ft_6_time = IntegerField(null = True)
+	ft_6_precip_intensity_max = FloatField(null = True)
+	ft_6_precip_accumulation = FloatField(null = True)
+	ft_6_temp_min = FloatField(null = True)
+	ft_6_temp_max = FloatField(null = True)
 
 	# Seven days in the future
-	ft_7_time = IntegerField()
-	ft_7_precip_intensity_max = FloatField()
-	ft_7_precip_accumulation = FloatField()
-	ft_7_temp_min = FloatField()
-	ft_7_temp_max = FloatField()
+	ft_7_time = IntegerField(null = True)
+	ft_7_precip_intensity_max = FloatField(null = True)
+	ft_7_precip_accumulation = FloatField(null = True)
+	ft_7_temp_min = FloatField(null = True)
+	ft_7_temp_max = FloatField(null = True)
 
 	coordinate = ForeignKeyField(
 		rel_model=Coordinate,
