@@ -179,23 +179,7 @@ def save_to_database(data):
 			print(e.args)
 	if error > 0:
 		flash('{} point(s) were not able to be added. Point names must be unique.'.format(error), 'danger')
-	# error = 0
-	# for coord in data:
-	# 	try:
-	# 		point = models.Coordinate.create(
-	# 			user = g.user._get_current_object(),
-	# 			latitude = coord['Latitude'],
-	# 			longitude = coord['Longitude'],
-	# 			name = coord['Name'],
-	# 			pin = coord['Pin'],
-	# 			notes = 'Uploaded from file.',
-	# 			published = publish
-	# 		)
-	# 	except IntegrityError as e:
-	# 		error += 1
-	# 		print(e.args)
-	# if error > 0:
-	# 	flash('{} points were not able to be added. Point names must be unique.'.format(error), 'danger')
+
 
 def write_workbook(query, filename, search):
 	"""Create ArcGIS compatible xls file using openpyxl."""
@@ -353,7 +337,8 @@ def upload():
 	form = forms.CoordFile()
 	if form.validate_on_submit():
 		# Save uploaded file on server if it is valid
-		filename = secure_filename(form.file.data.filename)	
+		filename = secure_filename(form.file.data.filename)
+		# If publish is true, the point is considered Public	
 		publish = form.publish.data
 		form.file.data.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 		data = parse_file(filename, publish)
