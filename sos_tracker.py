@@ -271,7 +271,7 @@ def download():
 	return object_list('download.html', query, dsearch=search_query, check_bounds=False)
 
 
-# View unpublished points
+# View private points visible only to that user and that user's team
 @app.route('/private')
 @login_required
 def private():
