@@ -31,6 +31,19 @@ class Team(Model):
 		except IntegrityError:
 			raise ValueError("Team already exists.")
 
+	@classmethod
+	def delete_team(cls, team_id):
+		to_delete = Team.get(Team.id == team_id)
+		to_delete.delete_instance(recursive=True, delete_nullable=True)
+
+	@classmethod
+	def get_team(cls, team_id):
+		return Team.get(Team.id == team_id)
+
+	@classmethod
+	def get_teams(cls):
+		return Team.select()
+
 class User(UserMixin, Model):
 	username = CharField(unique=True)
 	email = CharField(unique=True)
@@ -72,7 +85,7 @@ class Coordinate(Model):
 	notes = TextField()
 	recommended_visit = DateField(null=True)
 	slug = CharField(unique=True)
-	published = BooleanField(index=True) # Coordinates/points can be made public
+	published = BooleanField(index=True) # Published is being used as an alias for public
 	timestamp = DateTimeField(default=datetime.datetime.now, index=True)
 	user = ForeignKeyField(
 		rel_model=User,
@@ -128,8 +141,15 @@ class Coordinate(Model):
 
 
 	@classmethod
-	def private(cls):
-		return Coordinate.select().where(Coordinate.published == False)
+	def private(cls, user):
+		team = user.team
+		return (Coordinate
+			.select(Coordinate, User)
+			.join(User)
+			.where(
+				(User.team == team) &
+				(Coordinate.published == False))
+			.order_by(Coordinate.timestamp.desc()))
 
 
 	@classmethod

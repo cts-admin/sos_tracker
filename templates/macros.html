@@ -32,10 +32,12 @@
 		{{ macros.render_checkbox_field(form.remember_me) }}
  #}
 {% macro render_checkbox_field(field) -%}
-	<div class="checkbox">
-		<label>
-			{{ field(type='checkbox', **kwargs) }} {{ field.label }}
+	<div class="form-group {{ kwargs.pop('class_', '') }}">
+		<label for="{{ field.id }}">
+			{{ field(type='checkbox', **kwargs) }}
+			{{ field.label }}
 		</label>
+		 
 	</div>
 {%- endmacro %}
 

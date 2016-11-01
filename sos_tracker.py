@@ -48,6 +48,7 @@ def load_user(userid):
 	except models.DoesNotExist:
 		return None
 
+
 @app.before_request
 def before_request():
 	"""Connect to the database before each request."""
@@ -55,11 +56,13 @@ def before_request():
 	g.db.connect()
 	g.user = current_user
 
+
 @app.after_request
 def after_request(response):
 	"""Close the database connection after each request."""
 	g.db.close()
 	return response
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -80,6 +83,7 @@ def register():
 		return redirect(url_for('index'))
 	return render_template('register.html', form=form)
 
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
 	"""Log in existing users."""
@@ -98,6 +102,7 @@ def login():
 				flash("Your email or password doesn't match!", "error")
 	return render_template('login.html', form=form)
 
+
 @app.route('/logout', methods=['GET', 'POST'])
 def logout():
 	if request.method == 'POST':
@@ -106,11 +111,12 @@ def logout():
 		return redirect(url_for('login'))
 	return render_template('logout.html')
 
+
 # Parse file into list of coordinates
 def parse_file(filename, publish):
 	file = os.path.join(app.config['UPLOAD_FOLDER'], filename)
 	parsed = []
-	user = models.User.select().where(models.User.username == g.user._get_current_object().username)
+	user = models.User.get(models.User.username == g.user._get_current_object().username)
 	if filename[-3:] == 'txt':
 		with open(file, 'r') as f:
 			csv_input = csv.reader(f)
@@ -133,6 +139,7 @@ def parse_file(filename, publish):
 						'slug': slug
 					}
 					parsed.append(coordinate)
+
 
 	elif filename[-3:] == 'gpx':
 		tree = ET.parse(file)
@@ -166,6 +173,7 @@ def parse_file(filename, publish):
 					}
 					parsed.append(coordinate)
 	return parsed
+
 
 # Database expects parsed data
 # data is a list of coordinate dictionaries
@@ -201,6 +209,7 @@ def write_workbook(query, filename, search):
 
 	return wb
 
+
 # Views
 # Main landing page
 @app.route('/')
@@ -212,13 +221,14 @@ def index():
 		query = models.Coordinate.public().order_by(models.Coordinate.timestamp.desc())
 	return object_list('index.html', query, search=search_query, check_bounds=False)
 
+
 # Manually create a single GPS point
 @app.route('/create', methods = ['GET', 'POST'])
 @login_required
 def create():
 	form = forms.CreateCoordForm()
 	if form.validate_on_submit():
-		user = models.User.select().where(models.User.username == g.user._get_current_object().username)
+		user = models.User.get(models.User.username == g.user._get_current_object().username)
 		point = models.Coordinate.create(
 			user = user,
 			latitude = form.latitude.data,
@@ -231,6 +241,7 @@ def create():
 		flash("Entry created successfully.", "success")			
 		return redirect(url_for('detail', slug=point.slug))
 	return render_template('create.html', form=form)
+
 
 # Download points from database to ArcGIS compatible .xls file format
 @app.route('/download', methods = ['GET', 'POST'])
@@ -259,12 +270,15 @@ def download():
 			flash('Please specify a search name.', 'danger')
 	return object_list('download.html', query, dsearch=search_query, check_bounds=False)
 
+
 # View unpublished points
 @app.route('/private')
 @login_required
 def private():
-	query = models.Coordinate.private().order_by(models.Coordinate.timestamp.desc())
+	user = models.User.get(models.User.username == g.user._get_current_object().username)
+	query = models.Coordinate.private(user)
 	return object_list('index.html', query, check_bounds=False)
+
 
 @app.route('/<slug>')
 def detail(slug):
@@ -282,6 +296,7 @@ def detail(slug):
 			markers=[(point.latitude, point.longitude)]
 		)
 	return render_template('detail.html', point=point, pointmap=pointmap)
+
 
 @app.route('/<slug>/edit', methods=['GET', 'POST'])
 @login_required
@@ -311,6 +326,7 @@ def edit(slug):
 
 	return render_template('edit.html', point=point)
 
+
 # From peewee blog example
 # http://charlesleifer.com/blog/how-to-make-a-flask-blog-in-one-hour-or-less/
 @app.template_filter('clean_querystring')
@@ -321,15 +337,19 @@ def clean_querystring(request_args, *keys_to_remove, **new_values):
 	querystring.update(new_values)
 	return urlencode(querystring)
 
+
 # View list of uploaded files
 @app.route('/files')
 def list_files():
 	files = os.listdir(app.config['UPLOAD_FOLDER'])
+	files.remove('.gitignore')
 	return render_template('files.html', files=files)
+
 
 @app.errorhandler(404)
 def not_found(exc):
 	return Response('<h3>Not Found!</h3>'), 404
+
 
 # Upload files
 @app.route('/upload', methods=['GET', 'POST'])
@@ -347,10 +367,12 @@ def upload():
 		return redirect(url_for('index'))
 	return render_template('upload.html', form=form)
 
+
 # View file
 @app.route('/upload/<filename>')
 def uploaded(filename):
 	return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
 
 def main():
 	models.initialize()
@@ -362,7 +384,7 @@ def main():
 		)
 	except ValueError:
 		pass
-	app.run(debug=True)
+	app.run(host='0.0.0.0')
 
 if __name__ == '__main__':
 	main()
