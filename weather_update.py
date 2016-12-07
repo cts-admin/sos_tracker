@@ -1,3 +1,5 @@
+#!../bin/python3
+
 """
 Query database for coordinates and update weather data for each point.
 
